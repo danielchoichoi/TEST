@@ -330,6 +330,12 @@ header p {
     transform: translateY(1px);
 }
 
+.comments-section {
+    width: 100%;
+    margin-top: 2rem;
+    text-align: left; /* Necessary to prevent container's text-align center from messing up Disqus */
+}
+
 @media (max-width: 768px) {
     .theme-toggle {
         top: 1rem;
