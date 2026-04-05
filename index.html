@@ -9,6 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google AdSense Placeholder -->
+    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
 </head>
 <body>
     <div class="container">
@@ -36,6 +39,11 @@
                 <button id="btn-long-break" class="mode-btn" data-time="15">Long Break</button>
             </div>
             
+            <div class="custom-time-wrapper">
+                <input type="number" id="custom-time-input" class="custom-time-input" placeholder="Custom Min" min="1" max="120" aria-label="Custom time in minutes">
+                <button id="btn-custom" class="mode-btn custom-btn" data-time="custom">Set Time</button>
+            </div>
+            
             <div class="actions">
                 <button id="btn-play-pause" class="action-btn play-btn" aria-label="Play/Pause">
                     <i class="fas fa-play"></i>
@@ -46,6 +54,39 @@
             </div>
         </main>
         
+        <!-- AdSense Slot (Top of Content) -->
+        <div class="ad-container">
+            <!-- Replace with your actual AdSense ad unit code -->
+            <ins class="adsbygoogle"
+                 style="display:block; text-align:center;"
+                 data-ad-layout="in-article"
+                 data-ad-format="fluid"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="XXXXXXXXXX"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <article class="seo-content" id="guide">
+            <h2>포모도로(Pomodoro) 기법으로 생산성 극대화하기</h2>
+            <p><strong>포모도로 기법(Pomodoro Technique)</strong>은 1980년대 후반 프란체스코 시릴로(Francesco Cirillo)가 제안한 시간 관리 방법론입니다. 타이머를 이용해 25분간 집중해서 일한 다음, 5분간 휴식하는 방식을 반복하여 업무 효율과 집중력을 극대화할 수 있습니다.</p>
+            
+            <h3>포모도로 기법의 장점</h3>
+            <ul>
+                <li><strong>집중력 향상:</strong> 짧은 시간 동안 한 가지 일에 집중함으로써 뇌의 피로도를 낮추고 최고의 성과를 낼 수 있습니다.</li>
+                <li><strong>번아웃 방지:</strong> 정기적인 휴식 시간을 통해 업무 스트레스를 완화시켜 줍니다.</li>
+                <li><strong>시간 관리의 시각화:</strong> 본 타이머 툴을 통해 남은 시간을 시각적으로 확인하며 목표 달성을 향한 동기부여를 받을 수 있습니다.</li>
+            </ul>
+
+            <h3>타이머 사용 방법</h3>
+            <p>1. <strong>Work(작업)</strong> 모드를 선택하여 25분간 업무나 공부에 완전히 몰입하세요.<br>
+               2. 타이머가 울리면 <strong>Short Break(짧은 휴식)</strong>으로 5분간 완전히 쉬며 재충전하세요.<br>
+               3. 4번의 사이클이 끝나면 <strong>Long Break(긴 휴식)</strong>으로 15분간 깊은 휴식을 취하세요.<br>
+               4. 필요에 따라 <strong>직접 시간 설정(Custom Min)</strong> 기능을 이용해 본인 스타일에 맞는 유연한 타이머를 설정해 보세요.</p>
+            <p>감각적인 디자인과 확실한 편의성을 갖춘 이 타이머를 북마크에 추가해 두고, 매일 여러분의 목표 달성과 성공을 위해 활용하세요!</p>
+        </article>
+
         <!-- Maintain Disqus -->
         <hr class="divider">
         <div class="comments-section">
@@ -64,6 +105,16 @@
             </script>
             <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         </div>
+        </div>
+        
+        <footer class="site-footer">
+            <div class="footer-links">
+                <a href="#privacy">Privacy Policy</a> | 
+                <a href="#terms">Terms of Service</a> | 
+                <a href="mailto:contact@example.com">Contact Us</a>
+            </div>
+            <p class="copyright">&copy; 2026 Aesthetic Pomodoro Timer. All rights reserved.</p>
+        </footer>
     </div>
 
     <!-- Notification sound (silently embedded) -->

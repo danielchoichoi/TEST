@@ -35,6 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const modeText = document.getElementById('mode-text');
     const circle = document.querySelector('.progress-ring__circle');
     const bellSound = document.getElementById('bell-sound');
+    const customTimeInput = document.getElementById('custom-time-input');
+    const btnCustom = document.getElementById('btn-custom');
     
     // Calculate circumference
     const radius = circle.r.baseVal.value;
@@ -92,13 +94,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     modeBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            const minutes = parseInt(btn.getAttribute('data-time'));
+            const dataTime = btn.getAttribute('data-time');
+            let minutes;
             let text = "Time to work";
-            if (minutes === 5) text = "Short Break";
-            else if (minutes === 15) text = "Long Break";
+
+            if (dataTime === 'custom') {
+                minutes = parseInt(customTimeInput.value);
+                if (isNaN(minutes) || minutes <= 0) minutes = 25; // fallback
+                text = "Custom Time";
+            } else {
+                minutes = parseInt(dataTime);
+                if (minutes === 5) text = "Short Break";
+                else if (minutes === 15) text = "Long Break";
+            }
             
             setMode(minutes, text, btn);
         });
+    });
+
+    customTimeInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            btnCustom.click();
+            customTimeInput.blur();
+        }
     });
 
     function toggleTimer() {
