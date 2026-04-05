@@ -1,121 +1,142 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const drawBtn = document.getElementById('draw-btn');
-    const ballsContainer = document.getElementById('balls-container');
-    const themeToggle = document.getElementById('theme-toggle');
-
     // Theme switching logic
-    const savedTheme = localStorage.getItem('lotto-theme') || 'dark';
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = themeToggle.querySelector('i');
+    
+    let savedTheme = localStorage.getItem('pomodoro-theme') || 'dark';
     if (savedTheme === 'light') {
         document.body.classList.add('light-mode');
-        themeToggle.textContent = '🌙 다크 모드';
+        themeIcon.classList.replace('fa-sun', 'fa-moon');
     }
 
     themeToggle.addEventListener('click', () => {
         document.body.classList.toggle('light-mode');
         const isLight = document.body.classList.contains('light-mode');
-        themeToggle.textContent = isLight ? '🌙 다크 모드' : '☀️ 라이트 모드';
-        localStorage.setItem('lotto-theme', isLight ? 'light' : 'dark');
+        
+        if (isLight) {
+            themeIcon.classList.replace('fa-sun', 'fa-moon');
+        } else {
+            themeIcon.classList.replace('fa-moon', 'fa-sun');
+        }
+        localStorage.setItem('pomodoro-theme', isLight ? 'light' : 'dark');
     });
+
+    // Timer Logic
+    let isRunning = false;
+    let timer;
+    let timeRemaining = 25 * 60; // 25 mins
+    let totalTime = 25 * 60;
     
-    // Set up clean initial placeholders
-    function resetPlaceholders() {
-        ballsContainer.innerHTML = '';
-        
-        // 6 main numbers
-        for (let i = 0; i < 6; i++) {
-            const placeholder = document.createElement('div');
-            placeholder.className = 'ball placeholder';
-            placeholder.textContent = '?';
-            ballsContainer.appendChild(placeholder);
-        }
-        
-        // Plus sign separation
-        const plusSign = document.createElement('div');
-        plusSign.className = 'ball bonus-placeholder placeholder';
-        plusSign.textContent = '+';
-        ballsContainer.appendChild(plusSign);
-        
-        // 1 bonus number
-        const bonusPlaceholder = document.createElement('div');
-        bonusPlaceholder.className = 'ball placeholder';
-        bonusPlaceholder.textContent = '?';
-        ballsContainer.appendChild(bonusPlaceholder);
-    }
+    const timeDisplay = document.getElementById('time-display');
+    const playPauseBtn = document.getElementById('btn-play-pause');
+    const playPauseIcon = playPauseBtn.querySelector('i');
+    const resetBtn = document.getElementById('btn-reset');
+    const modeBtns = document.querySelectorAll('.mode-btn');
+    const modeText = document.getElementById('mode-text');
+    const circle = document.querySelector('.progress-ring__circle');
+    const bellSound = document.getElementById('bell-sound');
     
-    resetPlaceholders();
+    // Calculate circumference
+    const radius = circle.r.baseVal.value;
+    const circumference = radius * 2 * Math.PI;
+    circle.style.strokeDasharray = `${circumference} ${circumference}`;
+    circle.style.strokeDashoffset = 0;
 
-    function getRandomNumbers() {
-        const numbers = new Set();
-        while (numbers.size < 7) { 
-            numbers.add(Math.floor(Math.random() * 45) + 1);
-        }
-        
-        const numbersArray = Array.from(numbers);
-        const mainNumbers = numbersArray.slice(0, 6).sort((a, b) => a - b);
-        const bonusNumber = numbersArray[6];
-        
-        return { mainNumbers, bonusNumber };
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     }
 
-    function getColorClass(number) {
-        if (number <= 10) return 'color-1'; // Yellow
-        if (number <= 20) return 'color-2'; // Blue
-        if (number <= 30) return 'color-3'; // Red
-        if (number <= 40) return 'color-4'; // Purple
-        return 'color-5';                   // Green
+    function updateDisplay() {
+        timeDisplay.textContent = formatTime(timeRemaining);
+        document.title = `${formatTime(timeRemaining)} - Focus`;
+        
+        // Update ring
+        const offset = circumference - (timeRemaining / totalTime) * circumference;
+        circle.style.strokeDashoffset = offset;
     }
 
-    async function drawLotto() {
-        // Disable button during drawing
-        drawBtn.disabled = true;
-        drawBtn.textContent = '운명 확인 중...';
+    function setMode(duration, text, btn) {
+        // Stop timer if running
+        if (isRunning) toggleTimer();
         
-        // Clear container
-        ballsContainer.innerHTML = '';
+        // Update active button
+        modeBtns.forEach(b => {
+             b.classList.remove('active');
+             b.style.backgroundColor = "";
+             b.style.boxShadow = "none";
+        });
+        btn.classList.add('active');
         
-        const { mainNumbers, bonusNumber } = getRandomNumbers();
-        
-        const spawnBall = (number, isBonus = false, delay) => {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    const ball = document.createElement('div');
-                    // Bonus ball can use its own distinct color or rely on range, 
-                    // we'll keep the distinct bonus color for wow factor
-                    const colorClass = isBonus ? 'color-bonus' : getColorClass(number);
-                    ball.className = `ball ${colorClass}`;
-                    ball.textContent = number;
-                    ballsContainer.appendChild(ball);
-
-                    if (!isBonus && ballsContainer.children.length === 6) {
-                        setTimeout(() => {
-                            const plusSign = document.createElement('div');
-                            plusSign.className = 'ball bonus-placeholder placeholder';
-                            plusSign.textContent = '+';
-                            plusSign.style.animation = 'popIn 0.3s ease forwards';
-                            ballsContainer.appendChild(plusSign);
-                        }, 400); 
-                    }
-                    
-                    resolve();
-                }, delay);
-            });
-        };
-
-        // Draw main numbers with a nice suspenseful delay
-        for (let i = 0; i < mainNumbers.length; i++) {
-            await spawnBall(mainNumbers[i], false, i === 0 ? 0 : 800);
+        // Update ring color based on mode
+        if (text.includes("Break")) {
+            circle.style.stroke = "var(--accent)";
+            btn.style.backgroundColor = "var(--accent)";
+            btn.style.boxShadow = "0 4px 15px rgba(16, 185, 129, 0.4)";
+            
+            // Adjust linear gradients of play button to accent
+            playPauseBtn.style.background = "linear-gradient(135deg, #10b981, #059669)";
+            playPauseBtn.style.boxShadow = "0 10px 20px rgba(16, 185, 129, 0.3)";
+        } else {
+            circle.style.stroke = "var(--primary)";
+            playPauseBtn.style.background = ""; // Fallback to css
+            playPauseBtn.style.boxShadow = "";
         }
 
-        // Wait a bit more dramatically before the bonus number
-        await new Promise(r => setTimeout(r, 600));
-        await spawnBall(bonusNumber, true, 800);
-
-        // Allow redrawing after completion
-        setTimeout(() => {
-            drawBtn.disabled = false;
-            drawBtn.textContent = '다시 추첨하기';
-        }, 1000);
+        modeText.textContent = text;
+        totalTime = duration * 60;
+        timeRemaining = totalTime;
+        updateDisplay();
     }
 
-    drawBtn.addEventListener('click', drawLotto);
+    modeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const minutes = parseInt(btn.getAttribute('data-time'));
+            let text = "Time to work";
+            if (minutes === 5) text = "Short Break";
+            else if (minutes === 15) text = "Long Break";
+            
+            setMode(minutes, text, btn);
+        });
+    });
+
+    function toggleTimer() {
+        if (isRunning) {
+            clearInterval(timer);
+            playPauseIcon.classList.replace('fa-pause', 'fa-play');
+            // Remove pulse animation
+            circle.style.transition = "stroke-dashoffset 0.1s linear";
+        } else {
+            // Restore smooth transition
+            circle.style.transition = "stroke-dashoffset 1s linear, stroke 0.5s ease";
+            
+            timer = setInterval(() => {
+                timeRemaining--;
+                updateDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timer);
+                    playPauseIcon.classList.replace('fa-pause', 'fa-play');
+                    isRunning = false;
+                    try {
+                        bellSound.play();
+                    } catch(e) {}
+                }
+            }, 1000);
+            playPauseIcon.classList.replace('fa-play', 'fa-pause');
+        }
+        isRunning = !isRunning;
+    }
+
+    playPauseBtn.addEventListener('click', toggleTimer);
+
+    resetBtn.addEventListener('click', () => {
+        if (isRunning) toggleTimer();
+        timeRemaining = totalTime;
+        updateDisplay();
+    });
+
+    // Initialize
+    updateDisplay();
 });
