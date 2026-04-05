@@ -33,15 +33,17 @@
                 <div class="time-display" id="time-display">25:00</div>
             </div>
             
-            <div class="controls">
-                <button id="btn-work" class="mode-btn active" data-time="25">Work</button>
-                <button id="btn-short-break" class="mode-btn" data-time="5">Short Break</button>
-                <button id="btn-long-break" class="mode-btn" data-time="15">Long Break</button>
-            </div>
-            
-            <div class="custom-time-wrapper">
-                <input type="number" id="custom-time-input" class="custom-time-input" placeholder="Custom Min" min="1" max="120" aria-label="Custom time in minutes">
-                <button id="btn-custom" class="mode-btn custom-btn" data-time="custom">Set Time</button>
+            <div class="modes-container">
+                <div class="controls">
+                    <button id="btn-work" class="mode-btn active" data-time="25">Work</button>
+                    <button id="btn-short-break" class="mode-btn" data-time="5">Short Break</button>
+                    <button id="btn-long-break" class="mode-btn" data-time="15">Long Break</button>
+                </div>
+                
+                <div class="custom-time-wrapper">
+                    <input type="number" id="custom-time-input" class="custom-time-input" placeholder="Custom Min" min="1" max="120" aria-label="Custom time in minutes">
+                    <button id="btn-custom" class="mode-btn custom-btn" data-time="custom">Set Time</button>
+                </div>
             </div>
             
             <div class="actions">
@@ -56,9 +58,10 @@
         
         <!-- AdSense Slot (Top of Content) -->
         <div class="ad-container">
+            <span style="font-size: 0.8rem; margin-bottom: 0.5rem;">Advertisement Space</span>
             <!-- Replace with your actual AdSense ad unit code -->
             <ins class="adsbygoogle"
-                 style="display:block; text-align:center;"
+                 style="display:block; text-align:center; min-width: 250px; min-height: 50px;"
                  data-ad-layout="in-article"
                  data-ad-format="fluid"
                  data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"

@@ -259,12 +259,31 @@ header p {
 }
 
 /* Custom Time Input */
+.modes-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.5rem;
+    border-radius: 25px;
+    border: 1px solid var(--glass-border);
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 0; /* Reset margin since it's in modes-container */
+}
+
 .custom-time-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 0; /* Reset margin */
 }
 
 .custom-time-input {
@@ -292,57 +311,70 @@ header p {
 
 .custom-btn {
     border: 1px solid var(--glass-border);
+    font-size: 0.9rem;
+    padding: 0.5rem 1.2rem;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.custom-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
 }
 
 /* AdSense Container */
 .ad-container {
-    margin: 2rem 0;
+    margin: 3rem 0;
     min-height: 90px;
-    background: var(--glass-bg);
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px dashed var(--glass-border);
     border-radius: 15px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 1rem;
+    color: var(--text-muted);
 }
 
 /* SEO Content for AdSense */
 .seo-content {
     text-align: left;
-    background: var(--glass-bg);
+    background: rgba(255, 255, 255, 0.02);
     border: 1px solid var(--glass-border);
     border-radius: 20px;
-    padding: 2rem;
-    margin: 2rem 0;
+    padding: 2.5rem;
+    margin: 3rem 0;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 .seo-content h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    margin-bottom: 1.2rem;
     color: var(--primary);
+    text-align: center;
 }
 
 .seo-content h3 {
-    font-size: 1.2rem;
-    margin: 1.5rem 0 0.5rem;
+    font-size: 1.25rem;
+    margin: 2rem 0 0.8rem;
     color: var(--accent);
 }
 
 .seo-content p {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 1rem;
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 1.2rem;
     color: var(--text-color);
 }
 
 .seo-content ul {
     margin-left: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.2rem;
 }
 
 .seo-content li {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 0.6rem;
     color: var(--text-color);
 }
 
